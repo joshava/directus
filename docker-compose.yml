@@ -1,0 +1,27 @@
+version: "3"
+
+services:
+  app:
+    image: joshava/directus-app
+    ports:
+      - 80:80
+    volumes:
+      - ./app/config.js:/directus/config.js
+  api:
+    image: joshava/directus-api
+    ports:
+      - 8080:80
+    environment:
+      DATABASE_HOST: mysql
+      DATABASE_NAME: directus
+      DATABASE_USERNAME: directus
+      DATABASE_PASSWORD: directus
+      ADMIN_EMAIL: "directus@gmail.com"
+      ADMIN_PASSWORD: "directus"
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: directus
+      MYSQL_USER: directus
+      MYSQL_PASSWORD: directus
