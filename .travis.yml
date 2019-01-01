@@ -7,20 +7,22 @@ jobs:
         - docker build --tag "${DOCKER_IMAGE_APP}:latest" app
       before_deploy:
         - echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-        - if [ -n "$TRAVIS_TAG" ]; then docker tag "${DOCKER_IMAGE_APP}:latest" "${DOCKER_IMAGE_APP}:${$TRAVIS_TAG}"; fi
+        - if [ -n "$TRAVIS_TAG" ]; then docker tag "${DOCKER_IMAGE_APP}:latest" "${DOCKER_IMAGE_APP}:${TRAVIS_TAG}"; fi
       deploy:
         provider: script
         script: docker push "${DOCKER_IMAGE_APP}:latest" && if [ -n "$TRAVIS_TAG" ]; then docker push "${DOCKER_IMAGE_APP}:${TRAVIS_TAG}"; fi
         on:
           branch: master
+          tags: true
     - name: api
       script:
         - docker build --tag "${DOCKER_IMAGE_API}:latest" api
       before_deploy:
         - echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-        - if [ -n "$TRAVIS_TAG" ]; then docker tag "${DOCKER_IMAGE_API}:latest" "${DOCKER_IMAGE_API}:${$TRAVIS_TAG}"; fi
+        - if [ -n "$TRAVIS_TAG" ]; then docker tag "${DOCKER_IMAGE_API}:latest" "${DOCKER_IMAGE_API}:${TRAVIS_TAG}"; fi
       deploy:
         provider: script
         script: docker push "${DOCKER_IMAGE_API}:latest" && if [ -n "$TRAVIS_TAG" ]; then docker push "${DOCKER_IMAGE_API}:${TRAVIS_TAG}"; fi
         on:
           branch: master
+          tags: true
